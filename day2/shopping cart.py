@@ -1,8 +1,8 @@
 # /usr/bin/env python
 #coding:utf8
 
-
-commodity = {"pen":25,"coat":340,"umbrella":30,"keyboard":120}
+commodity = {"pen":25,"coat":340,"umbrella":30,"keyboard":120,"shoes":230}
+money = input("please input your money: ")
 
 print "please select  serial number of the commodity: "
 print "the commodity name and pric is: "
@@ -16,7 +16,8 @@ for name,price in commodity.items():
 
 result = {}
 while True:
-    num = raw_input("please input commodity number or 'q' to exit: ")
+    num = raw_input("please input commodity number or 'q' to settle accounts: ")
+    totalprices = 0
     if num == 'q' or num == None:
         break
     else:
@@ -24,17 +25,18 @@ while True:
         if num >= len(waitselect):
             print "you select commodity is not exist, please retry..."
             continue
-        print "Your select commodity is: %s" % waitselect[num]
         count = input("please input buy quantity: ")
-        result[waitselect[num]] = [count,commodity[waitselect[num]] * count]
+        seledted = waitselect[num]
+        result[seledted] = [count, commodity[seledted] * count]
+        for name, nums in result.items():
+            totalprices += nums[1]
+        print "Total amount of goods is: ",totalprices
+        if totalprices > money:
+            print "your Lack of balance, purchase failed"
+            exit()
 
-
-print "result is:",result
-print "This is you selected commodity bills: "
-print '{:<10}'.format('Commodity'),'{:^20}'.format('Numbers'),'{:>10}'.format('Price')
-totalprices=0
-for name,num in result.items():
-    print '{:<10}'.format(name),'{:^20}'.format(num[0]),'{:>10}'.format(num[1])
-    totalprices+=num[1]
-
-print "All commodity the total price is: ", totalprices
+    print "This is you selected commodity bills: "
+    print '{:<10}'.format('Commodity'),'{:^20}'.format('Numbers'),'{:>10}'.format('Price')
+    for name,num in result.items():
+        print '{:<10}'.format(name),'{:^20}'.format(num[0]),'{:>10}'.format(num[1])
+        totalprices+=num[1]
