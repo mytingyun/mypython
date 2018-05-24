@@ -38,7 +38,7 @@ def login(name):
                 if passwd == nowuser[1]:
                     print("login success")
                     session = 'success'
-                    break
+                    return session
                 else:
                     pwd+=1
                     print("your passwd is error, please retry...")
@@ -53,9 +53,6 @@ def login(name):
 
 def shopping():
     #商品列表
-    if session != 'success':
-        print("You haven't landed yet，please login..")
-        exit()
     commodity = {"pen":25,"coat":340,"umbrella":30,"keyboard":120,"shoes":230}
     money = input("please input your money: ")
     money = int(money)
@@ -104,23 +101,32 @@ def shopping():
     for name,num2 in result.items():
         print('{:<10}'.format(name),'{:^20}'.format(num2[0]),'{:>10}'.format(num2[1]))
     print("Total amount of goods is: ",amount)
+    exit()
 
 
 while True:
     print("what are you doing: \n"
           "1、登陆\n"
           "2、注册\n"
-          "3、购物")
+          "3、退出")
     do = input("please select number: ")
     do = int(do)
     if do == 1:
         name = input("please input your name for login: ")
-        login(name)
+        set = login(name)
+        if set == 'success':
+            print("1、购物\n"
+                  "2、返回上级菜单")
+            select = input("please select number: ")
+            if int(select) == 1:
+                shopping()
+            elif select == 2:
+                exit()
     elif do == 2:
         status = register()
         print(status)
     elif do == 3:
-        shopping()
+        exit()
     else:
         print("input error, please reatry...")
 
