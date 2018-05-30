@@ -8,9 +8,9 @@ def register():
     nowuser = file1.read()
     #print('now user is:', nowuser)
     while True:
-        user = input("please input your name: ")
-        passwd1 = input("please input your passwd: ")
-        passwd2 = input("please again input your passwd: ")
+        user = input("please input your name: ").strip()
+        passwd1 = input("please input your passwd: ").strip()
+        passwd2 = input("please again input your passwd: ").strip()
         if user in nowuser:
             print("your name is exist, please again input...")
             continue
@@ -34,7 +34,7 @@ def login(name):
             nowuser = reault.strip().split()
             #print("nowuser is: ",nowuser)
             while True:
-                passwd = input("please input your password: ")
+                passwd = input("please input your password: ").strip()
                 if passwd == nowuser[1]:
                     print("login success")
                     session = 'success'
@@ -54,7 +54,7 @@ def login(name):
 def shopping():
     #商品列表
     commodity = {"pen":25,"coat":340,"umbrella":30,"keyboard":120,"shoes":230}
-    money = input("please input your money: ")
+    money = input("please input your money: ").strip()
     money = int(money)
     print("please select  serial number of the commodity: ")
     print("the commodity name and pric is: ")
@@ -68,7 +68,7 @@ def shopping():
             print("{%d}  %s: %d" %(num0,name,price))
             waitselect.append(name)
             num0+=1
-        num = input("please input commodity number or 'q' to settle accounts: ")
+        num = input("please input commodity number or 'q' to settle accounts: ").strip()
         totalprices = 0
         #输入q去结算
         if str(num) == 'q':
@@ -79,7 +79,7 @@ def shopping():
             if num >= len(waitselect):
                 print("you select commodity is not exist, please retry...")
                 continue
-            count = input("please input buy quantity: ")
+            count = input("please input buy quantity: ").strip()
             count = int(count)
             #根据输入的序号定位商品名称
             seledted = waitselect[num]
@@ -109,15 +109,15 @@ while True:
           "1、登陆\n"
           "2、注册\n"
           "3、退出")
-    do = input("please select number: ")
+    do = input("please select number: ").strip()
     do = int(do)
     if do == 1:
-        name = input("please input your name for login: ")
+        name = input("please input your name for login: ").strip()
         set = login(name)
         if set == 'success':
             print("1、购物\n"
                   "2、返回上级菜单")
-            select = input("please select number: ")
+            select = input("please select number: ").strip()
             if int(select) == 1:
                 shopping()
             elif select == 2:
