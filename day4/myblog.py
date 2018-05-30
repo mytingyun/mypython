@@ -35,7 +35,7 @@ def login():
             while True:
                 passwd = input("please input your password: ").strip()
                 if passwd == nowuser[1]:
-                    print("login success")
+                    print("%s login success" %name)
                     log_status["username"] = name
                     log_status["status"] = True
                     return log_status
@@ -54,32 +54,33 @@ def login():
 def wrapper(f):
     def inner(name,status,*args,**kwargs):
         if name and status:
-            ret = f(name,status,*args,**kwargs)
+            ret = f(name,*args,**kwargs)
+            return ret
         else:
             print("您尚未登陆，请先登陆。。。")
-            login()
-        return ret
+            return False
+
     return inner
 
 
 @wrapper
-def article(username,status):
+def article(username):
     print("欢迎%s来到文章页面。。。。" %username)
 @wrapper
-def diary(username,status):
+def diary(username):
     print("欢迎%s来到日记页面。。。。" %username)
 @wrapper
-def comment(username,status):
+def comment(username):
     print("欢迎%s来到评论页面。。。。" %username)
 @wrapper
-def enshrine(username,status):
+def enshrine(username):
     print("欢迎%s来到收藏页面。。。。" %username)
 
-
-def logout():
+@wrapper
+def logout(name):
     log_status["username"] = None
     log_status["status"] = False
-    print("您已注销")
+    print("%s已注销"%name)
 
 
 funcs= {1: login, 2: register, 3: article, 4: diary, 5: comment, 6: enshrine, 7: logout, 8: exit}
@@ -96,8 +97,12 @@ while True:
           "8、退出程序")
     selectnum = input("please select number: ").strip()
     try:
-        if 0 < int(selectnum) <=len(funcs):
-            funcs[int(selectnum)](log_status["username"],log_status["status"])
+        select = int(selectnum)
+        if 0 < select <=len(funcs):
+            if 2 < select <= 7:
+                funcs[select](log_status["username"],log_status["status"])
+            else:
+                funcs[select]()
         else:
             print("您输入的超出范围")
     except ValueError as err:
