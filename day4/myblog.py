@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+import time
 
 log_status = {"username": None,"status": False}
 def register():
@@ -18,6 +19,9 @@ def register():
             continue
         else:
             file1.write('\n%s  %s' %(user, passwd1))
+            log_status["username"] =  user
+            log_status["status"] = True
+            print("%s已注册成功并登陆" %user)
             break
     return "%s user register success, please login..." %user
 
@@ -36,6 +40,7 @@ def login():
                 passwd = input("please input your password: ").strip()
                 if passwd == nowuser[1]:
                     print("%s login success" %name)
+                    logging(name,"login")
                     log_status["username"] = name
                     log_status["status"] = True
                     return log_status
@@ -59,7 +64,6 @@ def wrapper(f):
         else:
             print("您尚未登陆，请先登陆。。。")
             return False
-
     return inner
 
 
@@ -80,10 +84,22 @@ def enshrine(username):
 def logout(name):
     log_status["username"] = None
     log_status["status"] = False
+    logging(name,"logout")
     print("%s已注销"%name)
 
 
 funcs= {1: login, 2: register, 3: article, 4: diary, 5: comment, 6: enshrine, 7: logout, 8: exit}
+funcs2= {1: "login", 2: "register", 3: "article", 4: "diary", 5: "comment", 6: "enshrine", 7: "logout", 8: "exit"}
+
+def logging(user,func):
+    with open('log.txt',encoding='utf-8',mode='a+') as log:
+        datas = "{}年{}月{}日{}:{}:{}".format(time.localtime()[0], time.localtime()[1], time.localtime()[2],time.localtime()[3],
+                                           time.localtime()[4],time.localtime()[5])
+        if user:
+            log.write("\nuser %s in %s 调用了%s函数" %(user,datas,func))
+
+
+
 
 while True:
     print("欢迎来到博客园首页: \n"
@@ -99,8 +115,10 @@ while True:
     try:
         select = int(selectnum)
         if 0 < select <=len(funcs):
+            funcname = funcs2[select]
             if 2 < select <= 7:
                 funcs[select](log_status["username"],log_status["status"])
+                logging(log_status["username"],funcname)
             else:
                 funcs[select]()
         else:
