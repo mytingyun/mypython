@@ -57,9 +57,9 @@ def login():
         index += 1
 
 def wrapper(f):
-    def inner(name,status,*args,**kwargs):
-        if name and status:
-            ret = f(name,*args,**kwargs)
+    def inner(*args,**kwargs):
+        if log_status["status"]:
+            ret = f(*args,**kwargs)
             return ret
         else:
             print("您尚未登陆，请先登陆。。。")
@@ -117,7 +117,7 @@ while True:
         if 0 < select <=len(funcs):
             funcname = funcs2[select]
             if 2 < select <= 7:
-                funcs[select](log_status["username"],log_status["status"])
+                funcs[select](log_status["username"])
                 logging(log_status["username"],funcname)
             else:
                 funcs[select]()
