@@ -66,11 +66,11 @@ def diff_result(data1,data2,*args):
 
 
 
-import result_json
-#
-data1 = result_json.mydata
-data2 = result_json.data2
-ignore = ["created","modified","uuid"]
-#
-diff_result(data1,data2,ignore)
+# import result_json
+# #
+# data1 = result_json.mydata
+# data2 = result_json.data2
+# ignore = ["created","modified","uuid"]
+# #
+# diff_result(data1,data2,ignore)
 

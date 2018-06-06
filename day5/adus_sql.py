@@ -13,21 +13,30 @@ def last():
         values = int(values)
         if lastnum > values:
             f2.seek(0)
-            f2.write(lastnum)
-    return values
+            f2.write(str(lastnum))
+    return values,myline
 
-print(last())
 
 def add():
-    name = input("please input your name: ")
-    age = input("your age: ")
-    phone = input("your phone: ")
-    job = input("your job: ")
+    name = input("please input your name: ").strip()
+    age = input("your age: ").strip()
+    phone = input("your phone: ").strip()
+    job = input("your job: ").strip()
+    oldnum,linedata = last()
+    newnum = oldnum + 1
+    newdata = "\n%s,%s,%s,%s,%s" %(str(newnum),name,age,phone,job)
+    with open("datas.txt", encoding='utf-8', mode='a+') as f1:
+        f1.write(newdata)
+    last()
 
-    pass
+#add()
 
 def delete():
-    pass
+    oldnum, linedata = last()
+    for i in linedata:
+        print(i)
+
+delete()
 
 def update():
     pass
