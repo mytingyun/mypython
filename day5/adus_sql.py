@@ -32,16 +32,79 @@ def add():
 #add()
 
 def delete():
+    orderlist = []
+    datas = []
     oldnum, linedata = last()
     for i in linedata:
+        order = i.strip().replace('，',',').split(',')[0]
+        line = i.strip().replace('，', ',').split(',')
+        if line[0]:
+            datas.append(line)
+        if order.isdigit():
+            orderlist.append(order)
+    for i in datas:
         print(i)
+    while True:
+        delnum = input("please input need delete num: ").strip()
+        if not delnum.isdigit():
+            continue
+        elif delnum not in orderlist:
+            continue
+        else:
+            for i in datas:
+                if delnum == i[0]:
+                    print(delnum,"line delete success")
+                    del(datas[datas.index(i)])
+                    break
+            break
+    with open('datas2.txt',encoding='utf-8',mode='w') as f2:
+        for i in datas:
+            new = ','.join(i)
+            f2.write(new+'\n')
+    os.remove('datas.txt')
+    os.rename('datas2.txt','datas.txt')
 
-delete()
+
+
+#delete()
 
 def update():
     pass
 
+
+
 def select():
-    pass
+    while True:
+        choise = input("please your select sql: ").strip()
+        print(choise)
+        if "where" not in choise:
+            print("your input error,please retry..")
+            continue
+        else:
+            sql = choise.split("where")
+            print(sql)
 
 
+
+
+select()
+
+
+
+# funcs= {1: add, 2: delete, 3: update, 4: select, 5: exit}
+#
+# while True:
+#     print("欢迎使用: \n"
+#           "1、增加个人资料\n"
+#           "2、删除个人资料\n"
+#           "3、更新个人资料\n"
+#           "4、查询个人资料\n"
+#           "5、退出\n")
+#     selectnum = input("please select number: ").strip()
+#     try:
+#         select = int(selectnum)
+#         if 0 < select <= len(funcs):
+#             funcs[select]()
+#             exit()
+#     except ValueError as err:
+#         print("您输入有误，请输入1-5的数字")

@@ -1,7 +1,8 @@
-id，name，age，phone，job
+id,name,age,phone,job
 1,Alex,22,13651054608,IT
-2,Egon,23,13304320533,Tearcher
 3,nezha,25,1333235322,IT
-5,wang,23,13678986543,caiwu
-7,lilei,19,15743824755,sheji
-9,QiaoFeng,19,14839447867,XiaoShou
+4,CaoCao,28,13874823293,PianZi
+11, BeGo,34,13356764877,XiaoShou
+12,MeiMei,19,13898724511,Money
+14,LiuBei,Shu,13767883744,JiangJui
+15,Guo,16,15765442787,XianShou
