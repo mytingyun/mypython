@@ -76,13 +76,36 @@ def update():
 def select():
     while True:
         choise = input("please your select sql: ").strip()
-        print(choise)
+        #print(choise)
+        conduction = [">", "<", "=","like"]
         if "where" not in choise:
             print("your input error,please retry..")
             continue
         else:
             sql = choise.split("where")
             print(sql)
+            diff = None
+            for i in conduction:
+                if i in sql[1]:
+                    diff = i
+                    print("diff is: ", diff)
+            if diff == None:
+                print("Input need have %s,please retry.." %conduction)
+                continue
+
+            oldnum, linedata = last()
+            print(linedata)
+            field = linedata[0]
+            print("所有字段是：",field,type(field))
+            if '*' in sql[0]:
+                #带*的显示所有列
+                data = sql[1].split(diff)
+                print("字段是",data[0])
+                values = int(data[1])
+                print("需要比较的索引",field.index(data[0].strip()))
+            else:
+                #不带*, 只显示指定列
+                print("not *",sql)
 
 
 
