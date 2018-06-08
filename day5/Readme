@@ -1,0 +1,7 @@
+查询操作：
+使用类似下面的select语句：
+select name, age where age>22
+select * where job=IT
+select * where phone like 133
+
+要求select 和 where字段，否则会提示重新输入。
