@@ -65,13 +65,9 @@ def delete():
     os.rename('datas2.txt','datas.txt')
 
 
-
-#delete()
-
 def update():
+    print("this is updata")
     pass
-
-
 
 def select():
     while True:
@@ -83,51 +79,112 @@ def select():
             continue
         else:
             sql = choise.split("where")
-            print(sql)
+            #print(sql)
             diff = None
             for i in conduction:
                 if i in sql[1]:
                     diff = i
-                    print("diff is: ", diff)
+                    #print("diff is: ", diff)
             if diff == None:
                 print("Input need have %s,please retry.." %conduction)
                 continue
 
             oldnum, linedata = last()
-            print(linedata)
-            field = linedata[0]
-            print("所有字段是：",field,type(field))
+            all = []
+            for i in linedata:
+                line = i.strip().replace('，', ',').split(',')
+                if line[0]:
+                    all.append(line)
+            field = all[0]
+            #print("所有字段是：",field)
             if '*' in sql[0]:
                 #带*的显示所有列
+                #用比较符将where后的字段分开赋给data
                 data = sql[1].split(diff)
-                print("字段是",data[0])
-                values = int(data[1])
-                print("需要比较的索引",field.index(data[0].strip()))
+                #values是需要过滤出来的内容
+                values = data[1].strip()
+                #根据data[0]在首行字段列表中的位置定位出索引
+                myindex = field.index(data[0].strip())
+                del(all[0])
+                # 利用myindex索引循环找出符合上面values条件的行
+                for lists in all:
+                    if diff is "=":
+                        if lists[myindex] == values:
+                            print(lists)
+                    elif diff is "like":
+                        if values in lists[myindex].strip():
+                            print(lists)
+                    elif diff is ">":
+                        if lists[myindex] > values:
+                            print(lists)
+                    else:
+                        if lists[myindex] < values:
+                            print(lists)
             else:
                 #不带*, 只显示指定列
-                print("not *",sql)
+                rank = sql[0].replace(','," ").strip().split()
+                del(rank[0])
+                #rank为需要取的多个字段名
+                for i in rank:
+                    if i not in field:
+                        print("you input %s is not exist, please retry..." %i)
+                        continue
+                #用nowindex列表收集各字段在每行中的索引
+                nowindex = []
+                for i in rank:
+                    nowindex.append(field.index(i))
+                #字义收集所有新数据的列表
+                newall = []
+                del (all[0])
+                for list2 in all:
+                    #定义收集每一行的列表
+                    newline = []
+                    for i in nowindex:
+                        #循环索引收集每需要的字段为新行到列表
+                        newline.append(list2[i])
+                    #收集每一行
+                    newall.append(newline)
+                #print(newall)
+
+                #以下代码同上面带*号的代码
+                data = sql[1].split(diff)
+                values = data[1].strip()
+                myindex = field.index(data[0].strip())
+                for lists1 in all:
+                    for lists2 in newall:
+                        if diff is "=":
+                            if lists1[myindex] == values:
+                                print(lists2)
+                        elif diff is "like":
+                            if values in lists1[myindex].strip():
+                                print(lists2)
+                        elif diff is ">":
+                            if lists1[myindex] > values:
+                                print(lists2)
+                        else:
+                            if lists1[myindex] < values:
+                                print(lists2)
 
 
 
+#delete()
+#select()
 
-select()
 
+funcs= {1: add, 2: delete, 3: update, 4: select, 5: exit}
 
-
-# funcs= {1: add, 2: delete, 3: update, 4: select, 5: exit}
-#
-# while True:
-#     print("欢迎使用: \n"
-#           "1、增加个人资料\n"
-#           "2、删除个人资料\n"
-#           "3、更新个人资料\n"
-#           "4、查询个人资料\n"
-#           "5、退出\n")
-#     selectnum = input("please select number: ").strip()
-#     try:
-#         select = int(selectnum)
-#         if 0 < select <= len(funcs):
-#             funcs[select]()
-#             exit()
-#     except ValueError as err:
-#         print("您输入有误，请输入1-5的数字")
+while True:
+    print("欢迎使用: \n"
+          "1、增加个人资料\n"
+          "2、删除个人资料\n"
+          "3、更新个人资料\n"
+          "4、查询个人资料\n"
+          "5、退出\n")
+    selectnum = input("please select number: ").strip()
+    try:
+        select = int(selectnum)
+        if 0 < select <= len(funcs):
+            funcs[select]()
+            exit()
+    except ValueError as err:
+        print("您输入有误，请输入1-5的数字")
