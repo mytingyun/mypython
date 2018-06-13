@@ -1,7 +1,14 @@
-查询操作：
+1、增加操作
+输入姓名，年龄，电话，工作完成写入操作
+2、删除操作
+根据提示输入要删除行的ID，完成删除操作
+3、更新操作未完成
+4、查询操作：
+要求select 和 where字段，否则会提示重新输入。
 使用类似下面的select语句：
-select name, age where age>22
+select * where age>22
+select * where age<22
 select * where job=IT
 select * where phone like 133
 
-要求select 和 where字段，否则会提示重新输入。
+select * 的查找已经实现了，就是select 指定字段的还没有实现，还有错误
