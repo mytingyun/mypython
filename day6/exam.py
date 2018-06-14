@@ -318,6 +318,8 @@ with open("1.txt",encoding='utf-8',mode='r') as f1:
         all.append(dicts)
 print(all)
 
+提个问题：
+循环每一行添加到字典元素中时候，key值相同会被覆盖了，所以只能得到最后一行，有什么思路可以在覆盖前获取到
 
 
 2、写函数，完成以下功能：（6
