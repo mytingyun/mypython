@@ -301,6 +301,25 @@ nonlocal是引用局部变量从哪层引用的该变量，从那层开始全部
 利用文件操作，将其构造成如下数据类型。
 [{'id': '1', 'name': 'alex', 'age': '22', 'phone': '13651054608', 'job': 'IT'}, ......]
 
+答：
+li = ["id","name","age","phone","job"]
+dicts = {}
+all = []
+with open("1.txt",encoding='utf-8',mode='r') as f1:
+    result = []
+
+    for i in f1.readlines():
+        #print(i.strip().split(','))
+        lines = i.strip().split(',')
+        result.append(lines)
+    for a in result:
+        for b in range(len(a)):
+            dicts[li[b]] = a[b]
+        all.append(dicts)
+print(all)
+
+
+
 2、写函数，完成以下功能：（6
 分）
 用户将文件名（文件前提必须存在），操作方法（只有r, w, a三种）传入此函数，此函数按照传入的参数完成相应的操作。
@@ -313,16 +332,172 @@ func(‘a.txt’, ’r’) 此函数完成的就是以读的模式打开a.txt文
 func(‘a.txt’, ’w’, ’老男孩教育’)此函数完成的就是以写的模式打开a.txt文件，将内容写入。
 func(‘a.txt’, ’a’, ’老男孩教育’)此函数完成的就是以追加的模式打开a.txt文件，将内容追加。
 
-
+答：
+def func(path, mode, *args):
+    with open(path,encoding='utf-8',mode=mode) as f1:
+        if mode == "r":
+            print(f1.read())
+        elif mode == "w":
+            f1.write(args[0])
+        elif mode == "a":
+            f1.write("\n"+args[0])
 
 3、写函数完成以下功能：（6
 分）
 给函数传入一个列表（此列表里面的元素必须全部是str类型），将列表中的每个元素按照顺序依次加上他们的索引，形成新的元素，并添加到一个新列表，将新列表返回。
 例如：给函数传入一个列表[‘alex’, ’太白’]，
 返回值为[‘alex0’, ’太白1’]
+答：
+def func1(lists):
+    result =[]
+    for key,value in enumerate(lists):
+        new = str(key)
+        result.append(value+new)
+    return result
+
+
 
 4，写一个函数，完成注册的功能，将用户名，密码写入到文件中（用户名不能重复，如果重复提示他重新输入）。再写一个函数，完成三次登录功能，账号密码从注册的文件中获取。（12
 分）
+答：
+注册函数：
+def register():
+    file1 = open('username.txt',encoding='utf-8',mode='a+')
+    file1.seek(0)
+    nowuser = file1.read()
+    #print('now user is:', nowuser)
+    while True:
+        user = input("please input your name: ").strip()
+        passwd1 = input("please input your passwd: ").strip()
+        passwd2 = input("please again input your passwd: ").strip()
+        if user in nowuser:
+            print("your name is exist, please again input...")
+            continue
+        elif passwd1 != passwd2:
+            print("you input twice password different, please again again input...")
+            continue
+        else:
+            file1.write('\n%s  %s' %(user, passwd1))
+            break
+    return "%s user register success, please login..." %user
+
+登陆函数：
+def login():
+    with open("username.txt",encoding='utf-8',mode='r+') as file2:
+        alluser = file2.readlines()
+    name = input("please input your name for login: ").strip()
+    index = 0
+    pwd = 0
+    for user in alluser:
+        if name in user:
+            reault = alluser[index]
+            nowuser = reault.strip().split()
+            #print("nowuser is: ",nowuser)
+            while True:
+                passwd = input("please input your password: ").strip()
+                if passwd == nowuser[1]:
+                    print("login success")
+                    break
+                else:
+                    pwd+=1
+                    print("your passwd is error, please retry...")
+                    if pwd == 3:
+                        print("your input password error thrice, your account locked")
+                        exit()
+                    continue
+            break
+        if index == len(alluser)-1:
+            print("your name is not exist,please register")
+            break
+        index += 1
+
 
 5、编写装饰器，为多个函数加上认证的功能（用户名密码存在文件中，只有一个），要求登录成功一次（给三次机会），后续的函数都无需再输入用户名和密码。（10
 分）
+
+答：
+def wrapper(f):
+    def inner(*args,**kwargs):
+        if log_status["status"]:
+            ret = f(*args,**kwargs)
+            return ret
+        else:
+            print("您尚未登陆，请先登陆。。。")
+            return False
+    return inner
+
+log_status = {"username": None,"status": False}
+def login():
+    name = input("请输入你的用户名： ").strip()
+    with open("username.txt",encoding='utf-8',mode='r+') as file2:
+        alluser = file2.readlines()
+    index = 0
+    pwd = 0
+    for user in alluser:
+        if name in user:
+            reault = alluser[index]
+            nowuser = reault.strip().split()
+            while True:
+                passwd = input("please input your password: ").strip()
+                if passwd == nowuser[1]:
+                    print("%s login success" %name)
+                    log_status["username"] = name
+                    log_status["status"] = True
+                    return log_status
+                else:
+                    pwd+=1
+                    print("your passwd is error, please retry...")
+                    if pwd == 3:
+                        print("your input password error thrice, your account locked")
+                        exit()
+                    continue
+        if index == len(alluser)-1:
+            print("your name is not exist,please register")
+            break
+        index += 1
+
+
+@wrapper
+def article(username):
+    print("欢迎%s来到文章页面。。。。" %username)
+@wrapper
+def diary(username):
+    print("欢迎%s来到日记页面。。。。" %username)
+@wrapper
+def comment(username):
+    print("欢迎%s来到评论页面。。。。" %username)
+@wrapper
+def enshrine(username):
+    print("欢迎%s来到收藏页面。。。。" %username)
+
+@wrapper
+def logout(name):
+    log_status["username"] = None
+    log_status["status"] = False
+    print("%s已注销"%name)
+
+funcs= {1: login, 2: article, 3: diary, 4: comment, 5: enshrine, 6: logout, 7: exit}
+
+
+while True:
+    print("欢迎: \n"
+          "1、登陆\n"
+          "2、文章页面\n"
+          "3、日记页面\n"
+          "4、评论页面\n"
+          "5、收藏页面\n"
+          "6、注销\n"
+          "7、退出程序")
+    selectnum = input("please select number: ").strip()
+    try:
+        select = int(selectnum)
+        if 0 < select <=len(funcs):
+            if 1 < select <= 6:
+                funcs[select](log_status["username"])
+            else:
+                funcs[select]()
+        else:
+            print("您输入的超出范围")
+    except ValueError as err:
+        print("您输入有误，请输入1-7的数字")
+
