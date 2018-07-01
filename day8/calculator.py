@@ -23,7 +23,6 @@ def cutstr(allstr):
             for num,left in content:
                 if left == "(":
                     leftlist.append(num)
-            #print(leftlist)
             return newstr[leftlist[-1]:]
 
 
@@ -34,7 +33,6 @@ def multi_division(datas,res):
     matchs = re.search(res,datas)
     if matchs.group():
         equa = matchs.group()
-        #print("equa is--",equa)
         if "*" in equa:
             resu = equa.split("*")
             result = float(resu[0]) * float(resu[1])
@@ -107,9 +105,7 @@ def double_addsub(datas,res):
     '''
     :计算符为+和-或为两个-号
     '''
-    #print("datas is:",datas)
     matchs = re.search(res, datas)
-    #print("matchs is:",matchs)
     #如果没有匹配出结果，直接返回数据
     if matchs is None:
         return None,datas
@@ -139,9 +135,7 @@ def bracket(alldata):
     #再进行加减法运算
     resuAS = circulation_AS(resuMD)
     resuAS2 = resuAS.strip("()")
-    #print("result is: ",resuAS2)
     newdata = nospace.replace(newdata,resuAS2)
-    #print("newdata is: ",newdata)
     #如果结果中只有一个小括号，就返回
     if newdata.count('(') > 1:
         return bracket(newdata)
@@ -152,7 +146,7 @@ if __name__ == '__main__':
     alldata = '1 - 2 * ( (60-30 +(-40/5) * (9-10/3 + 7 /3*99/4*2998 +10 * 568/14)) - (-4*3)/ (16-3*2) )'
     #去除空格
     enddata = bracket(alldata)
-    #返回最后一个小括号：1-2*(30.0+-1388367.0476190478--12.0/10.0)
+    #返回最后一个小括号算式：1-2*(30.0+-1388367.0476190478--12.0/10.0)
     data = cutstr(enddata)
     #先用乘除法运算
     resuMD = circulation_MD(data)
@@ -161,7 +155,6 @@ if __name__ == '__main__':
     res = '\d+(\.\d+)?[+-][+-]\d+(\.\d+)?'
     newdata = double_addsub(resuMD, res)
     olddata = resuMD.replace(newdata[0], str(newdata[1]))
-    #print("@@@",olddata)
     res2 = '[+-]\d+(\.\d+)?[+-][+-]\d+(\.\d+)?'
     newdata = double_addsub(olddata, res2)
     newdata = olddata.replace(newdata[0], str(newdata[1]))
