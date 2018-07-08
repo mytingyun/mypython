@@ -1,7 +1,6 @@
 [DEFAULT]
 
 
-
 [Python]
 period = month_3
 price = 3000
@@ -13,6 +12,14 @@ price = 5000
 teacher = Oldboy
 
 
+[Go]
+period = month_5
+price = 6000
+teacher = TaiBai
 
 
+[Java]
+period = month_6
+price = 8000
+teacher = Caocao
 

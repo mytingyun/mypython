@@ -14,18 +14,16 @@ config.read(lessonfile)
 
 
 logs = loggings()
-# logs.loggers.error("这是error")
-# logs.loggers.info("这是info")
 
 class Student:
     def __init__(self,name):
         self.name = name
 
 
-    # @wrapper
+    @wrapper
     def get_lesson(self):
         self.lesslist = []
-        logs.loggers.info("%s同学查看了所有课程" %self.name)
+        logs.loggers.info("%s查看了所有课程" % self.name)
         for i in config.sections():
             self.lesslist.append(i)
             print("%s课程的周期为%s;\n"
@@ -34,7 +32,7 @@ class Student:
 
 
 
-    #@wrapper
+    @wrapper
     def choose_lesson(self):
         self.get_lesson()
         for i in enumerate(self.lesslist):
@@ -49,7 +47,7 @@ class Student:
         else:
             print("请输入数字。。")
 
-    #@wrapper
+    @wrapper
     def get_chose_lesson(self):
         file1 = open(choseless,mode='r',encoding='utf-8')
         all_lesson = file1.readlines()
@@ -78,15 +76,22 @@ class Manager(Student):
         self.name = name
         Student.__init__(self,name)
 
-    # @wrapper
+    @wrapper
     def create_lesson(self):
         self.lesson_name = input("pls input lesson name: ").strip()
         self.lesson_period = input("pls input lesson period: ").strip()
         self.lesson_price = input("pls input lesson price: ").strip()
         self.teacher = input("pls input teacher name for lesson: ").strip()
+        configs = configparser.ConfigParser()
+        configs[self.lesson_name] = {"period": self.lesson_period,
+                               "price": self.lesson_price,
+                               "teacher": self.teacher}
+        with open(lessonfile,mode='a',encoding='utf-8') as f:
+            configs.write(f)
+        logs.loggers.info("管理员%s创建了%s课程" %(self.name,self.lesson_name))
+        print("管理员%s创建了%s课程" %(self.name,self.lesson_name))
 
-
-    # @wrapper
+    @wrapper
     def create_student(self):
         self.student_name = input("pls input student name: ").strip()
         self.spasswd = input("pls input password: ").strip()
@@ -95,13 +100,14 @@ class Manager(Student):
         with open(userfile,mode='a',encoding='utf-8') as userf:
             userf.write("\n%s %s student" %(self.student_name,md5pwd))
         print("创建学生帐号成功，用户名为：%s，密码为：%s" %(self.student_name,self.spasswd))
+        logs.loggers.info("管理员%s创建了学生,帐号为：%s" %(self.name,self.student_name))
 
-    # @wrapper
+    @wrapper
     def get_all_lessons(self):
-        stud = Student('test')
+        stud = Student(self.name)
         stud.get_lesson()
 
-    # @wrapper
+    @wrapper
     def get_all_student(self):
         with open("%s/db/user.txt" % bash_dir, encoding='utf-8', mode='r+') as file2:
             alluser = file2.readlines()
@@ -111,12 +117,14 @@ class Manager(Student):
                 resu = user.strip().split()
                 allstudent.append(resu[0])
         print("所有的学生名字如下：")
+        logs.loggers.info("管理员%s查看了所有学生名单" % self.name)
         for i in allstudent:
             print(i)
 
-    # @wrapper
+    @wrapper
     def get_student_lesson(self,studname):
         stud2 = Student(studname)
+        logs.loggers.info("管理员%s查看了%s学生名单" % (self.name,studname))
         stud2.get_chose_lesson()
 
 

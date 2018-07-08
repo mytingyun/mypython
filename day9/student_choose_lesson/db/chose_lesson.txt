@@ -1,3 +1,5 @@
 wang Linux
-tian Go
+tian Python
 wang Python
+bright Python
+bright Linux

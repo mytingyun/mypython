@@ -9,10 +9,10 @@ from core.mains import *
 if __name__ == "__main__":
     print("请先登陆。。。")
     login()
+    logs.loggers.info("%s登陆成功" % log_status["username"])
     while True:
         if log_status["identity"] == "student":
             print("登陆成功，欢迎%s同学" % log_status["username"])
-            logs.loggers.info("%s同学登陆成功" % log_status["username"])
             students = Student(log_status["username"])
             print("您可以如下操作：\n"
                   "1、查看所有课程\n"
@@ -27,6 +27,7 @@ if __name__ == "__main__":
             elif studnum == "3":
                 students.get_chose_lesson()
             elif studnum == "4":
+                logs.loggers.info("%s同学退出登陆" % log_status["username"])
                 exit()
             else:
                 print("您输入有误 ，请重新输入")
@@ -53,4 +54,5 @@ if __name__ == "__main__":
                 studname = input("请输入学生的名字：").strip()
                 admin1.get_student_lesson(studname)
             elif adminnum == "6":
+                logs.loggers.info("管理员%s退出登陆" % log_status["username"])
                 exit()

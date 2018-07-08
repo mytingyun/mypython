@@ -24,13 +24,6 @@ class loggings:
 
 
 
-# loggers.debug("这是debug")
-# loggers.info("这是info")
-# loggers.warning("这是warning")
-# loggers.error("这是error")
-# loggers.critical("这是critical")
-
-
 
 
 
