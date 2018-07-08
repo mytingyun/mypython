@@ -14,7 +14,7 @@ class loggings:
 
     screen.setFormatter(fomatter)
     filemange.setFormatter(fomatter)
-    screen.setLevel(logging.INFO)
+    screen.setLevel(logging.ERROR)
     filemange.setLevel(logging.INFO)
 
     loggers.addHandler(filemange)
