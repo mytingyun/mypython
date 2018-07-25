@@ -15,7 +15,7 @@ def get_md5(file,n = 10240):
 
 
 
-def cli_conn(file,n=5000):
+def cli_conn(n=1024):
     cli = socket.socket()
     cli.connect(('127.0.0.1',9001))
     while True:
@@ -26,28 +26,29 @@ def cli_conn(file,n=5000):
         select = input("请选择：").strip()
         if select == '1':
             cli.send(select.encode('utf-8'))
+            file1 = input("请输入要上传的文件名：")
             msg = cli.recv(1024).decode('utf-8')
             print("服务器端消息：",msg)
-            # cli.send(b"uploading the file")
-            with open(file, 'rb') as f1:
-                file_size = os.path.getsize(file)
-                cli.send(file.encode('utf-8'))
+            with open(file1, 'rb') as f1:
+                file_size = os.path.getsize(file1)
+                cli.send(file1.encode('utf-8'))
                 cli.send(str(file_size).encode('utf-8'))
                 time.sleep(0.1)
                 while file_size > 0:
                     content = f1.read(n)
-                    print("读取类型：",type(content))
                     cli.send(content)
                     file_size -= n
         elif select == '2':
             cli.send(select.encode('utf-8'))
             msg2 = cli.recv(1024).decode('utf-8')
             print("服务器端消息：", msg2)
-            cli.send(b'I want download the files')
+            file2 = input("请输入要下载的文件名：")
+            cli.send(file1.encode('utf-8'))
+            # cli.send(b'I want download the files')
         elif select == '3':
             cli.send(select.encode('utf-8'))
             break
     cli.close()
 
 if __name__ == '__main__':
-    cli_conn('sea_sky')
+    cli_conn()

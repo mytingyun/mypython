@@ -28,21 +28,19 @@ def serve_start():
                 print('文件名是：',files['filename'])
                 filesize = conn.recv(1024)
                 files['filesize'] = filesize
-                print("文件大小是：",files['filesize'],type(files['filesize']))
+                print("文件大小是：",files['filesize'])
                 files['filesize'] = int(files['filesize'])
                 f1 = open(files['filename'], mode='wb')
                 while files['filesize'] > 0:
-                    content = conn.recv(5000)
-                    # print("内容是：",content,"类型：",type(content))
-                    # content = content.decode('utf-8')
-                    # rece_file(files['filename'],content)
+                    content = conn.recv(1024)
                     f1.write(content)
-                    files['filesize'] -= 5000
+                    files['filesize'] -= 1024
                 f1.close()
             if res == b'2':
                 conn.send(b"ple select download filename")
                 res = conn.recv(1024)
                 print("客户端端消息：", res)
+                file2 = conn.recv(1024)
             if res == b'3':
                 break
         conn.close()
