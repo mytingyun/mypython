@@ -14,7 +14,6 @@ def get_md5(file,n = 10240):
         return md5_obj.hexdigest()
 
 
-
 def cli_conn(n=1024):
     cli = socket.socket()
     cli.connect(('127.0.0.1',9001))
@@ -33,7 +32,7 @@ def cli_conn(n=1024):
                 file_size = os.path.getsize(file1)
                 cli.send(file1.encode('utf-8'))
                 cli.send(str(file_size).encode('utf-8'))
-                time.sleep(0.1)
+                time.sleep(0.5)
                 while file_size > 0:
                     content = f1.read(n)
                     cli.send(content)
@@ -43,7 +42,17 @@ def cli_conn(n=1024):
             msg2 = cli.recv(1024).decode('utf-8')
             print("服务器端消息：", msg2)
             file2 = input("请输入要下载的文件名：")
-            cli.send(file1.encode('utf-8'))
+            cli.send(file2.encode('utf-8'))
+            filesize = cli.recv(1024)
+            print("服务器端消息：要下载的文件大小是",filesize)
+            filesize = int(filesize)
+            file2 = file2+'rece'
+            f1 = open(file2, mode='wb')
+            while filesize > 0:
+                content = cli.recv(1024)
+                f1.write(content)
+                filesize -= 1024
+            f1.close()
             # cli.send(b'I want download the files')
         elif select == '3':
             cli.send(select.encode('utf-8'))

@@ -1,5 +1,5 @@
 # coding: utf-8
-import os
+import os,time
 import socket
 import hashlib
 
@@ -9,9 +9,7 @@ files = {'filename':'receive','filesize':0}
 #     with open(filename,mode='ab') as f1:
 #         f1.write(contact)
 
-
-
-def serve_start():
+def serve_start(n=1024):
     serv = socket.socket()
     serv.bind(('127.0.0.1',9001))
     serv.listen()
@@ -22,7 +20,8 @@ def serve_start():
             #print("res is:",res)
             if res == b'1':
                 conn.send(b"please upload")
-                filename = conn.recv(7)
+                filename = conn.recv(1024)
+                time.sleep(0.1)
                 file1 = filename.decode('utf-8')
                 files['filename'] = file1+'back'
                 print('文件名是：',files['filename'])
@@ -38,9 +37,18 @@ def serve_start():
                 f1.close()
             if res == b'2':
                 conn.send(b"ple select download filename")
-                res = conn.recv(1024)
-                print("客户端端消息：", res)
                 file2 = conn.recv(1024)
+                print("客户端端消息：要下载的文件是 ", file2)
+                file2 = file2.decode('utf-8')
+                with open(file2, 'rb') as f2:
+                    file_size = os.path.getsize(file2)
+                    print('file size is',file_size)
+                    conn.send(str(file_size).encode('utf-8'))
+                    time.sleep(0.1)
+                    while file_size > 0:
+                        content = f2.read(n)
+                        conn.send(content)
+                        file_size -= n
             if res == b'3':
                 break
         conn.close()
