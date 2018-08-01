@@ -4,6 +4,7 @@ import json
 import struct
 import socket
 import hashlib
+from cli_config import *
 
 def processBar(num, total):
     rate = num / total
@@ -21,8 +22,16 @@ def send_dic(sk,dic):
     sk.send(len_dic)
     sk.send(bytes_dic)
 
-def download():
-    pass
+def myrecv(sk):
+    dic_len = sk.recv(4)
+    dic_len = struct.unpack('i', dic_len)[0]
+    dic = sk.recv(dic_len).decode('utf-8')
+    dic = json.loads(dic)
+    return dic
+
+def login():
+    user = input("user: ")
+    password = input("password: ")
 
 def upload(sk):
     # 上传这个操作
@@ -39,7 +48,7 @@ def upload(sk):
     send_dic(sk,dic)
     with open(file_path,'rb') as f:
         while filesize > 0:
-            content = f.read(1024)
+            content = f.read(read_rize)
             md5.update(content)
             sk.send(content)
             filesize -= len(content)
@@ -47,12 +56,38 @@ def upload(sk):
     md5code = md5.hexdigest()
     dic = {'md5code': md5code}
     send_dic(sk, dic)
-    result = sk.recv(1024)
+    result = sk.recv(read_rize)
     print(result.decode('utf-8'))
+
+def download(sk):
+    md5 = hashlib.md5()
+    sk.send(b'download')
+    filename = input('filename : ')
+    dic = {'filename': filename}
+    send_dic(sk, dic)
+    size = myrecv(sk)
+    origin_filesize = size['filesize']
+    with open(os.path.join('upload', filename), 'wb') as f:
+        while size['filesize'] > 0:
+            content = sk.recv(read_rize)
+            md5.update(content)
+            f.write(content)
+            size['filesize'] -= len(content)
+            processBar(origin_filesize - size['filesize'], origin_filesize)
+    md5code = md5.hexdigest()
+    md5dic = myrecv(sk)
+
+    if md5dic['md5code'] == md5code:
+        print("下载成功")
+    else:
+        print("server md5:",md5dic)
+        print("local md5:",md5code)
+
+status = {'user': None,'status': 'offline'}
 
 if __name__ == '__main__':
     sk = socket.socket()
-    sk.connect(('127.0.0.1',9000))
+    sk.connect(connect)
     choices_lst= [('上传',upload),('下载',download)]
     while True:
         for num,item in enumerate(choices_lst,1):
