@@ -34,7 +34,11 @@ class MyFTPServer(socketserver.BaseRequestHandler):
         sk.send(bytes_dic)
 
     def login(self):
-
+        dic = self.myrecv()
+        print(dic)
+        with open("users.ini", encoding='utf-8', mode='r+') as file2:
+            alluser = file2.readlines()
+            print(alluser)
 
     def upload(self):
         # 接收要上传的文件信息
@@ -44,7 +48,7 @@ class MyFTPServer(socketserver.BaseRequestHandler):
         # {'filename':file,'filesize':71827}
         with open(os.path.join('upload',dic['filename']),'wb') as f:
             while dic['filesize'] > 0 :
-                content = self.request.recv(1024)
+                content = self.request.recv(read_rize)
                 md5.update(content)
                 f.write(content)
                 dic['filesize'] -= len(content)

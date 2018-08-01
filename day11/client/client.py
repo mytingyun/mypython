@@ -29,9 +29,23 @@ def myrecv(sk):
     dic = json.loads(dic)
     return dic
 
-def login():
+def wrapper(f):
+    def inner(*args,**kwargs):
+        if log_stat["status"] == 'online':
+            f(*args,**kwargs)
+        else:
+            print("您尚未登陆，请先登陆。。。")
+            return False
+    return inner
+
+def login(sk):
+    md5 = hashlib.md5()
     user = input("user: ")
     password = input("password: ")
+    md5.update(password.encode('utf-8'))
+    md5pwd = md5.hexdigest()
+    userinfo = {'user': user, 'password':md5pwd}
+    send_dic(sk,userinfo)
 
 def upload(sk):
     # 上传这个操作
@@ -83,17 +97,18 @@ def download(sk):
         print("server md5:",md5dic)
         print("local md5:",md5code)
 
-status = {'user': None,'status': 'offline'}
+log_stat = {'user': None,'status': 'offline'}
 
 if __name__ == '__main__':
     sk = socket.socket()
     sk.connect(connect)
-    choices_lst= [('上传',upload),('下载',download)]
+    choices_lst= [('登录',login),('上传',upload),('下载',download)]
     while True:
         for num,item in enumerate(choices_lst,1):
             print(num,item[0])
         num = int(input('num >>> '))
         choices_lst[num-1][1](sk)
+
 
 
 
