@@ -30,7 +30,7 @@ def myrecv(sk):
     return dic
 
 def wrapper(f):
-    def inner(*args,**kwargs):
+    def inner(sk):
         if log_stat["status"] == 'online':
             f(sk)
         else:
@@ -49,7 +49,6 @@ def login(sk):
     userinfo = {'user': user, 'password':md5pwd}
     send_dic(sk,userinfo)
     result = myrecv(sk)
-    print(result)
     if result['user'] == None:
         print(user ,'用户不存在!')
     elif result['status'] == 'offline':
@@ -61,10 +60,6 @@ def login(sk):
 
 @wrapper
 def upload(sk):
-    # 上传这个操作
-    # 要上传的文件信息
-    # 文件(大文件)
-    # 上传成功
     md5 = hashlib.md5()
     sk.send(b'upload')
     file_path = input('filepath : ')

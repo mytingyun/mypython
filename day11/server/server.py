@@ -31,7 +31,6 @@ class MyFTPServer(socketserver.BaseRequestHandler):
     def send_dic(self,sk, dic):
         bytes_dic = json.dumps(dic).encode('utf-8')
         len_dic = struct.pack('i', len(bytes_dic))
-        print("struct len:",len(len_dic))
         sk.send(len_dic)
         sk.send(bytes_dic)
 
@@ -39,21 +38,17 @@ class MyFTPServer(socketserver.BaseRequestHandler):
         dic = self.myrecv()
         name = dic['user']
         passwd = dic['password']
-        print('passwd is:',passwd)
         with open("users.txt", encoding='utf-8', mode='r+') as file2:
             alluser = file2.readlines()
-            print(alluser)
             index = 0
             for user in alluser:
-                print(user)
                 if name in user:
                     reault = alluser[index]
                     nowuser = reault.strip().split()
-                    print('user is:',nowuser)
                     if passwd == nowuser[1]:
                         log_stat = {'user': nowuser[0], 'status': 'online'}
                         self.send_dic(self.request,log_stat)
-                        exit()
+
                     else:
                         log_stat = {'user': nowuser[0], 'status': 'offline'}
                         self.send_dic(self.request, log_stat)
@@ -61,10 +56,9 @@ class MyFTPServer(socketserver.BaseRequestHandler):
                 if index == len(alluser)-1:
                     log_stat = {'user': None, 'status': 'nouser'}
                     self.send_dic(self.request,log_stat)
-                    # print("your name is not exist,please register")
                     break
-                print("index",index,len(alluser))
                 index += 1
+
 
     def upload(self):
         # 接收要上传的文件信息
@@ -105,7 +99,6 @@ class MyFTPServer(socketserver.BaseRequestHandler):
 
     def handle(self):
         operate = self.request.recv(read_rize).decode('utf-8')
-        print("operate is:", operate)
         # {'operate':'upload','name':''} 'download'
         func = getattr(self,operate)
         func()
