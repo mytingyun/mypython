@@ -32,21 +32,34 @@ def myrecv(sk):
 def wrapper(f):
     def inner(*args,**kwargs):
         if log_stat["status"] == 'online':
-            f(*args,**kwargs)
+            f(sk)
         else:
             print("您尚未登陆，请先登陆。。。")
             return False
     return inner
 
 def login(sk):
+    global log_stat
     md5 = hashlib.md5()
+    sk.send(b'login')
     user = input("user: ")
     password = input("password: ")
     md5.update(password.encode('utf-8'))
     md5pwd = md5.hexdigest()
     userinfo = {'user': user, 'password':md5pwd}
     send_dic(sk,userinfo)
+    result = myrecv(sk)
+    print(result)
+    if result['user'] == None:
+        print(user ,'用户不存在!')
+    elif result['status'] == 'offline':
+        print('密码错误，请重试')
+    elif result['status'] == 'online':
+        log_stat = result
+        print(user,'用户登陆成功！！')
 
+
+@wrapper
 def upload(sk):
     # 上传这个操作
     # 要上传的文件信息
@@ -73,6 +86,8 @@ def upload(sk):
     result = sk.recv(read_rize)
     print(result.decode('utf-8'))
 
+
+@wrapper
 def download(sk):
     md5 = hashlib.md5()
     sk.send(b'download')
@@ -108,15 +123,6 @@ if __name__ == '__main__':
             print(num,item[0])
         num = int(input('num >>> '))
         choices_lst[num-1][1](sk)
-
-
-
-
-
-
-
-
-
 
 
 
