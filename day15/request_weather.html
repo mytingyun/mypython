@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .city{
+            width: 80px;
+            height: 40px;
+            background-color: purple;
+            cursor: pointer;
+            line-height: 40px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+        .city_weather{
+            position: absolute;
+            top: 40px;
+            width: 500px;
+            height: 500px;
+            background-color: darkgrey;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="city">
+        北京
+        <div class="city_weather">
+
+        </div>
+
+    </div>
+    <script src="jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            var timer = null
+           $('.city').mouseenter(function () {
+              // console.log(1)
+                $.ajax({
+                   url:'https://free-api.heweather.com/s6/weather/forecast?location=beijing&key=22e6cfa60eb14bfaa8d356a3d121fc27',
+                   type:'get',
+                    success:function (data) {
+                        var cond_text = data.HeWeather6[0].daily_forecast
+                        var day1 = cond_text[0];
+                        console.log(day1);
+                        var day2 = cond_text[1];
+                        var day3 = cond_text[2];
+                        var lengths = cond_text.length;
+                        // $('.city_weather').text(cond_text);
+                        $('.city_weather').empty();
+                        // $('.city_weather').append('<a href="#">'+cond_text+'</a>')
+                        //tab键 上面的反引号  插入变量 使用${变量名}
+                        for (var i=0;i<lengths;i++)
+                        {
+                        $('.city_weather').append(`<div class="weather${i}"></div>`)
+                            }
+
+                        function weather_all(day) {
+                            var day1weath = day.date+", "+day.cond_txt_d+"，最高温度："+day.tmp_max+"，最低温度："+day.tmp_min+", 风向："+day.wind_dir
+                            return day1weath
+                        }
+//                        var day1weath = day1.date+", "+day1.cond_txt_d+"，最高温度："+day1.tmp_max+"，最低温度："+day1.tmp_min+", 风向："+day1.wind_dir
+                        $('.weather0').text(weather_all(day1));
+                        $('.weather0').append(`<img src="./iconweather/${day1.cond_code_d}.png" />`);
+
+
+
+
+                        $('.weather1').text(weather_all(day2));
+                        $('.weather1').append(`<img src="./iconweather/${day2.cond_code_d}.png" />`)
+
+                        $('.weather2').text(weather_all(day3));
+                        $('.weather2').append(`<img src="./iconweather/${day3.cond_code_d}.png" />`)
+
+                    },
+                    error:function (err) {
+                        console.log(err);
+                    }
+                });
+
+                timer = setTimeout(function () {
+                        $('.city_weather').css('display','block');
+                },1000)
+           });
+
+             $('.city').mouseleave(function () {
+                 console.log(2)
+                $('.city_weather').css('display','none');
+                clearTimeout(timer);
+           });
+        });
+    </script>
+</body>
+</html>
