@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div style="margin: 5px;">
+        <a href="/crm/classes/add/" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i> 添加</a>
+    </div>
+<table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>课程名</th>
+                <th>期数</th>
+                <th>老师</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for row in class_queryset %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.course }}</td>
+                    <td>{{ row.num }}</td>
+                    <td>{{ row.teachers }}</td>
+                    <td>
+                        <a href="/crm/classes/edit/{{ row.id }}/"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        |
+                        <a href="/crm/classes/del/{{ row.id }}/" style="color: red;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+        {% endfor %}
+
+
+        </tbody>
+</table>
+
+
+{% endblock %}

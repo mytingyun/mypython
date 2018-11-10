@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./reset.css">
+    <style>
+        .regs{
+            width: 720px;
+            height: 400px;
+            background-color: darkgrey;
+        }
+
+        .regs p{
+            margin-bottom: 20px;
+            width: 720px;
+            height: 42px;
+        }
+
+        .regs .a{
+            border:0;
+            float:left;
+            /*font-size: 20px;*/
+            height: 42px;
+            width: 313px;
+            padding-left: 15px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .regs p .b{
+            width: 156px;
+        }
+
+        .regs p label{
+            float:left;
+            height: 42px;
+            width: 65px;
+            margin-right: 10px;
+            line-height: 42px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .pregs{
+            margin-left: 81px;
+        }
+
+        .pregs a input{
+            width: 270px;
+            height: 42px;
+            border: none;
+            background-color: #3f89ec;
+            border-radius: 5px;
+            color: rgb(255,255,255);
+        }
+
+        .regs p .code{
+           border: none;
+           width: 145px;
+           height: 42px;
+           padding-left: 0;
+           text-align: center;
+           border-radius: 3px;
+           background: #f7f7f7;
+           border: 1px solid #ddd;
+           font-weight: 400;
+
+       }
+
+    </style>
+</head>
+<body>
+<div class="regs">
+    <form action="http://172.17.2.214:9001">
+        <p>
+        <label for="user">用户名</label>
+        <input type="text" name="username" id="user" placeholder="请输入用户名" class="a">
+        </p>
+        <p>
+        <label for="pwd">密码</label>
+        <input type="password" name="pwd" id="pwd" class="a" placeholder="请输入密码">
+        </p>
+        <p class="pregs">
+            <a href="#">
+                        <input type="submit" value="登陆">
+            </a>
+        </p>
+    </form>
+
+</div>
+
+</body>
+</html>

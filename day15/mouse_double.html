@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="box" style="cursor: pointer">123</div>
+<script src="jquery-3.3.1.js"></script>
+<script>
+    //300ms 一次性定时器 单双机解决冲突问题
+ $(function(){
+
+    //为ID为div1的div同时绑定普通的单双击事件
+
+    $(".box").click(function(){
+
+        $(this).animate({left:"+=20"});//动画效果，让div1向右边滑动20个像素
+
+    }).dblclick(function(){
+
+        $(this).animate({top:"+=20"});//动画效果，让div1向下滑动20个像素
+
+    });
+
+
+
+    //先初始化两个函数
+
+    var
+click_event = function(){//单击要触发的函数
+
+        $(this).animate({left:"+=20"});//注意：这里的this指向的是匹配的元素
+
+    };
+
+    var
+dblclick_event = function(){//双击要触发的函数
+
+        $(this).animate({top:"+=20"});//注意：这里的this指向的是匹配的元素
+
+    }
+
+    $(".box").skygqOneDblClick({oneclick:click_event,dblclick:dblclick_event});//调用区分元素单双击事件的插件
+
+});$(function(){
+
+    //为ID为div1的div同时绑定普通的单双击事件
+
+    $(".box").click(function(){
+
+        $(this).animate({left:"+=20"});//动画效果，让div1向右边滑动20个像素
+
+    }).dblclick(function(){
+
+        $(this).animate({top:"+=20"});//动画效果，让div1向下滑动20个像素
+
+    });
+
+
+
+    //先初始化两个函数
+
+    var
+click_event = function(){//单击要触发的函数
+
+        $(this).animate({left:"+=20"});//注意：这里的this指向的是匹配的元素
+
+    };
+
+    var
+dblclick_event = function(){//双击要触发的函数
+
+        $(this).animate({top:"+=20"});//注意：这里的this指向的是匹配的元素
+
+    }
+
+    $(".box").skygqOneDblClick({oneclick:click_event,dblclick:dblclick_event});//调用区分元素单双击事件的插件
+
+});
+</script>
+</body>
+</html>
